@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AfyaSalama prototype</title>
+<style>
+:root{--bg:#f3efe6;--ink:#17302b;--mut:#566a64;--card:#fffdf8;--g:#0f6b57;--o:#b8700f;--r:#b3402e;--line:#d9d2c0;--tint:#e4f1ec;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10201c;--ink:#efe9da;--mut:#a5b8b2;--card:#182d28;--g:#3fb594;--o:#f0a53a;--r:#ee7b68;--line:#2c4540;--tint:#1d3b34}}
+:root[data-theme="dark"]{--bg:#10201c;--ink:#efe9da;--mut:#a5b8b2;--card:#182d28;--g:#3fb594;--o:#f0a53a;--r:#ee7b68;--line:#2c4540;--tint:#1d3b34}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,sans-serif}
+main{max-width:540px;margin:0 auto;padding:20px 16px 48px}
+h1{font:700 30px/1.1 Georgia,serif;margin:6px 0 6px}
+h2{font:700 18px/1.3 Georgia,serif;margin:0 0 6px}
+.lead{margin:0 0 14px;color:var(--mut)}
+.steps{display:grid;gap:8px;margin:0 0 18px;padding:0;list-style:none}
+.steps li{background:var(--tint);border-radius:12px;padding:10px 12px;font-size:14px}
+.steps b{display:block}
+.tabs{display:flex;gap:6px;margin-bottom:12px}
+.tabs button{flex:1;padding:10px 4px;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;line-height:1.2}
+.tabs button[aria-selected=true]{border-color:var(--g);background:var(--g);color:#fff}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--o);outline-offset:2px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:12px}
+.try{background:var(--tint);border-left:5px solid var(--g);border-radius:8px;padding:10px 12px;font-size:14px;margin:10px 0}
+.ussd{background:#1b2b1f;color:#b9f3c0;font:15px/1.5 ui-monospace,Menlo,monospace;border-radius:12px;padding:14px;min-height:190px;white-space:pre-wrap;border:4px solid #0c1610}
+.keys{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.keys button,.btn{padding:12px;border-radius:10px;border:0;background:var(--g);color:#fff;font-weight:700;font-size:14px;cursor:pointer;text-align:left;line-height:1.25}
+.keys button.alt{background:var(--card);color:var(--ink);border:2px solid var(--line)}
+label{display:block;font-size:13px;color:var(--mut);margin:12px 0 4px}
+input,select{width:100%;padding:10px;border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-size:16px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pill{display:inline-block;padding:3px 10px;border-radius:99px;font-size:13px;font-weight:700;color:#fff}
+.ok{background:var(--g)}.hi{background:var(--r)}
+.bar{height:18px;background:var(--line);border-radius:99px;overflow:hidden;margin:8px 0}
+.bar i{display:block;height:100%;background:var(--g);transition:width .4s}
+table{width:100%;border-collapse:collapse;font-size:14px}
+td,th{padding:8px 4px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+td:last-child{text-align:right;white-space:nowrap}
+.big{font:700 44px/1 Georgia,serif}
+.note{font-size:13px;color:var(--mut);margin-top:10px}
+.next{margin-top:12px;width:100%;text-align:center}
+.who{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.who span{background:var(--tint);padding:3px 10px;border-radius:99px;font-size:13px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main>
+<h1>AfyaSalama</h1>
+<p class="lead">One price for everyone: 500 TZS a week keeps the whole community safe from high blood pressure and diabetes. This is a clickable demo with sample data. Follow the 3 steps below.</p>
+
+<ol class="steps">
+<li><b>Step 1: Member</b>Pays 500 TZS a week from a basic phone and checks the health pot.</li>
+<li><b>Step 2: Health worker</b>Checks blood pressure every week and records it.</li>
+<li><b>Step 3: Partner</b>Employers, insurers and local government pay only when more people are healthy.</li>
+</ol>
+
+<div class="tabs" role="tablist">
+<button role="tab" aria-selected="true" data-t="m">Step 1<br>Member</button>
+<button role="tab" aria-selected="false" data-t="w">Step 2<br>Health worker</button>
+<button role="tab" aria-selected="false" data-t="s">Step 3<br>Partner</button>
+</div>
+
+<section id="m">
+<div class="card">
+<h2>Neema's phone</h2>
+<div>No internet or smartphone needed. She dials a short code and uses the menu in Swahili or English.</div>
+<div class="try"><b>Try this:</b> tap "Contribute 500 TZS", then "Confirm". Watch the group health pot grow.</div>
+<div class="ussd" id="scr" aria-live="polite"></div>
+<div class="keys" id="keys"></div>
+<div class="note">Payment is simulated. In real use it goes by M-Pesa, Mixx by Yas or Airtel Money. The health pot pays for insurance enrollment, medicines and clinic transport.</div>
+<button class="btn next" data-go="w">Next: see the health worker</button>
+</div>
+</section>
+
+<section id="w" hidden>
+<div class="card">
+<h2>Weekly health check</h2>
+<div>A trained community health worker meets the group each week. Everyone gets the same free check.</div>
+<div class="try"><b>Try this:</b> pick Juma, enter 126 over 82, tap "Save reading". His status changes to Controlled.</div>
+<label for="nm">Member</label><select id="nm"></select>
+<div class="two">
+<div><label for="sy">Top number (systolic)</label><input id="sy" type="number" inputmode="numeric" value="152"></div>
+<div><label for="di">Bottom number (diastolic)</label><input id="di" type="number" inputmode="numeric" value="96"></div>
+</div>
+<button class="btn" id="save" style="margin-top:12px;width:100%;text-align:center">Save reading</button>
+<p id="res" aria-live="polite" style="margin:12px 0 0"></p>
+<div class="note">In this demo, below 140/90 is "Controlled". Higher readings are referred to a clinic. Members who stay controlled pay less.</div>
+<button class="btn next" data-go="s">Next: see what partners see</button>
+</div>
+</section>
+
+<section id="s" hidden>
+<div class="card">
+<h2>Partner dashboard</h2>
+<div>Partners fund the program, but only for results. They see group totals, never names.</div>
+<div class="who"><span>Employers</span><span>Insurers</span><span>Local government</span><span>NGOs</span></div>
+<div class="try"><b>Try this:</b> go back to Step 2 and save a reading for a member, then return here. The numbers change.</div>
+<div class="big" id="pct">0%</div>
+<div>of the 15 members have controlled blood pressure</div>
+<div class="bar"><i id="fill" style="width:0"></i></div>
+<table>
+<tr><td>Members controlled</td><td id="okn">0 of 15</td></tr>
+<tr><td>Partner pays for each controlled member</td><td>5,000 TZS</td></tr>
+<tr><td><b>Result payment due</b></td><td><b id="due">0 TZS</b></td></tr>
+<tr><td>Group health pot (member savings)</td><td id="pot">0 TZS</td></tr>
+</table>
+<div class="note">Every member pays the same 500 TZS and gets the same care. Partner payments cover health worker time and tests, so the price stays low. The 5,000 TZS figure is a sample to be refined with mentors.</div>
+<button class="btn next" data-go="m">Back to Step 1</button>
+</div>
+</section>
+</main>
+
+<script>
+var names=["Neema","Juma","Asha","Baraka","Rehema","Salim","Zawadi","Omari","Mariam","Hamisi","Furaha","Daudi","Amina","Peter","Grace"];
+var badIdx=[1,4,7,10,13],data={};
+names.forEach(function(n,i){var bad=badIdx.indexOf(i)>-1;data[n]={ok:!bad,sys:bad?152:128,dia:bad?96:82}});
+var pot=22500,contrib=500,screen='home',streak=3;
+var $=function(i){return document.getElementById(i)};
+
+function go(t){
+ document.querySelectorAll('.tabs button').forEach(function(x){x.setAttribute('aria-selected',x.dataset.t===t)});
+ ['m','w','s'].forEach(function(id){$(id).hidden=(id!==t)});
+ render();window.scrollTo(0,0);
+}
+document.querySelectorAll('.tabs button').forEach(function(b){b.onclick=function(){go(b.dataset.t)}});
+document.querySelectorAll('[data-go]').forEach(function(b){b.onclick=function(){go(b.dataset.go)}});
+
+var menu=[["1","Health pot","pot"],["2","My reading","read"],["3","Contribute 500 TZS","pay"],["4","Group streak","grp"],["5","Optional extra top-up","top"]];
+function ussd(){
+ var d=data.Neema,t='';
+ if(screen==='home')t='AFYASALAMA\n1. Kiriba cha afya / Health pot\n2. Kipimo changu / My reading\n3. Changia / Contribute 500 TZS\n4. Kikundi / Group streak\n5. Ongeza / Optional extra top-up';
+ if(screen==='pot')t='Group health pot\n'+pot.toLocaleString()+' TZS\n\nPays for insurance, medicines and clinic transport.\n\n0. Back';
+ if(screen==='read')t='My last reading\n'+d.sys+'/'+d.dia+' mmHg\n'+(d.ok?'CONTROLLED. Well done, you pay less.':'HIGH. Please visit your clinic this week.')+'\n\n0. Back';
+ if(screen==='pay')t='Contribute 500 TZS to the group pot by mobile money?\n\nNew pot: '+(pot+contrib).toLocaleString()+' TZS\n\n1. Confirm   0. Cancel';
+ if(screen==='top')t='Optional extra top-up of 500 TZS.\nOpen to every member, never required.\n\n1. Confirm   0. Cancel';
+ if(screen==='paid')t='Asante! Thank you.\n500 TZS added.\nGroup pot: '+pot.toLocaleString()+' TZS\n\n0. Back to menu';
+ if(screen==='grp')t='Healthy Streak\n'+streak+' weeks in a row with most members controlled.\n1 more week unlocks a savings payback.\n\n0. Back';
+ $('scr').textContent=t;
+ var k=$('keys');k.innerHTML='';
+ if(screen==='home'){menu.forEach(function(m){add(k,m[0]+'. '+m[1],function(){screen=m[2];ussd()})})}
+ else if(screen==='pay'||screen==='top'){add(k,'1. Confirm',function(){pot+=contrib;screen='paid';render()});add(k,'0. Cancel',function(){screen='home';ussd()},1)}
+ else{add(k,'0. Back to menu',function(){screen='home';ussd()},1)}
+}
+function add(k,txt,fn,alt){var b=document.createElement('button');b.textContent=txt;if(alt)b.className='alt';b.onclick=fn;k.appendChild(b)}
+
+names.forEach(function(n){var o=document.createElement('option');o.textContent=n;$('nm').appendChild(o)});
+$('nm').value='Juma';
+$('save').onclick=function(){
+ var s=+$('sy').value,d=+$('di').value,n=$('nm').value;
+ if(!s||!d){$('res').textContent='Enter both numbers.';return}
+ var ok=s<140&&d<90;data[n]={ok:ok,sys:s,dia:d};
+ $('res').innerHTML='<b>'+n+'</b>: '+s+'/'+d+' <span class="pill '+(ok?'ok':'hi')+'">'+(ok?'Controlled':'High: refer to clinic')+'</span>';
+ render();
+};
+
+function render(){
+ var ok=0;names.forEach(function(n){if(data[n].ok)ok++});
+ var p=Math.round(ok/names.length*100);
+ $('pct').textContent=p+'%';$('fill').style.width=p+'%';
+ $('okn').textContent=ok+' of '+names.length;
+ $('due').textContent=(ok*5000).toLocaleString()+' TZS';
+ $('pot').textContent=pot.toLocaleString()+' TZS';
+ ussd();
+}
+render();
+</script>
+</body>
+</html>
